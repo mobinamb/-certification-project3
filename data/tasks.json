@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Task 1",
+    "priority": "high",
+    "status": "todo",
+    "dueDate": "2024-02-21"
+  },
+  {
+    "title": "Task 2",
+    "priority": "medium",
+    "status": "in progress",
+    "dueDate": "2024-02-25"
+  }
+]
