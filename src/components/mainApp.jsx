@@ -3,14 +3,13 @@ import AddTaskForm from './AddTaskForm'; // Import  AddTaskForm component
 import TaskList from './TaskList'; // Import TaskList component
 import tasksData from '../../data/tasks.json';
 
-
 const mainApp = () => {
   // State to store task data
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     
-    const tasks = JSON.parse(tasksData);
+    const tasks = typeof tasksData === 'string' ? JSON.parse(tasksData) : tasksData;
     setTasks(tasks);
 
   }, []);

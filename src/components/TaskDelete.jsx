@@ -16,7 +16,7 @@ const TaskDelete = ({ taskId, handleDeleteTask }) => {
 
   return (
     <div>
-      <button onClick={handleDelete}>Delete Task</button>
+      <button onClick={handleDeleteTask}>Delete Task</button>
       {showConfirm && (
         <div className="confirmation-dialog">
           <p>Are you sure you want to delete this task?</p>
