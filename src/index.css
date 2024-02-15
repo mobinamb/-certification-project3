@@ -1,12 +1,31 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/* Basic styles for navigation bar and content area */
+body {
+  font-family: Arial, sans-serif; /* Adjust font family as needed */
   margin: 0;
+  padding: 0;
 }
 
-img,
-svg {
-  display: block;
-  max-width: 100%;
+nav {
+  background-color: #f0f0f0;
+  height: 50px; /* Adjust height as needed */
+  display: flex; /* For horizontal layout */
+  justify-content: space-between; /* Distribute elements evenly */
+  align-items: center; /* Align vertically */
+  padding: 0 20px; /* Add horizontal padding */
 }
+
+nav a {
+  text-decoration: none;
+  color: #333; /* Adjust text color */
+  padding: 10px 15px; /* Adjust padding */
+  font-size: 16px; /* Adjust font size */
+}
+
+nav a:hover {
+  background-color: #ddd; /* Highlight on hover */
+}
+
+main {
+  padding: 20px; /* Add padding to content area */
+}
+
