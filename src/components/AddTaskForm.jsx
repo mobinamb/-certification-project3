@@ -4,6 +4,7 @@ const AddTaskForm = ({ onTaskAdd }) => {
   // State for form fields and error messages
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('');
+  const [completion, setCompletion] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [additionalFields, setAdditionalFields] = useState({});
   const [errors, setErrors] = useState({});
@@ -21,8 +22,8 @@ const AddTaskForm = ({ onTaskAdd }) => {
       const newTask = {
         title,
         priority,
-        dueDate,
-        ...additionalFields,
+        completion,
+        dueDate
       };
 
       onTaskAdd(newTask);
@@ -30,8 +31,8 @@ const AddTaskForm = ({ onTaskAdd }) => {
       // Reset form fields after submission
       setTitle('');
       setPriority('');
+      setCompletion('');
       setDueDate('');
-      setAdditionalFields({});
     }
   };
 
@@ -47,6 +48,11 @@ const AddTaskForm = ({ onTaskAdd }) => {
     if (!priority) {
       isValid = false;
       errors.priority = "Priority is required.";
+    }
+
+    if (!completion) {
+      isValid = false;
+      errors.completion = "completion is required.";
     }
 
     if (!dueDate) {
@@ -78,6 +84,14 @@ const AddTaskForm = ({ onTaskAdd }) => {
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
+
+      <select value={completion} onChange={(e) => setCompletion(e.target.value)}>
+        <option value="">Select Completion</option>
+        <option value="todo">todo</option>
+        <option value="in progress">in progress</option>
+        <option value="completed">completed</option>
+      </select>
+
       <input
         type="date"
         value={dueDate}

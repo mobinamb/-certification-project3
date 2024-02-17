@@ -5,6 +5,7 @@ import {
   Link
 } from 'react-router-dom'
 
+import React, { useEffect } from 'react';
 /**
  * Importing other components
  */
@@ -14,6 +15,23 @@ import Contact from './components/Contact';
 import MainApp from './components/mainApp';
 
 const App = () => {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'q' && !event.ctrlKey && !event.metaKey) {
+        if (confirm('Are you sure you want to exit?')) {
+          //window.close();
+          window.location.href = ''; // Change location to an empty string
+
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
   return (
     <Router>
       <nav>
