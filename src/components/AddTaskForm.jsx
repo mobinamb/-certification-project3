@@ -6,7 +6,6 @@ const AddTaskForm = ({ onTaskAdd }) => {
   const [priority, setPriority] = useState('');
   const [completion, setCompletion] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [additionalFields, setAdditionalFields] = useState({});
   const [errors, setErrors] = useState({});
 
   const handleSubmit = (e) => {

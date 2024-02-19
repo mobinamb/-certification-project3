@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import TaskEdit from './TaskEdit';
 import Task from './Task';
+
 import { readTasksFromFile, writeTasksToFile } from '../utils/fileOperations';
 
-const TaskList = ({ tasks, onTaskDelete, setTasks }) => {
+const TaskList = ({ tasks, onTaskDelete, setTasks}) => {
   // State for currently edited task ID
   const [editedTaskId, setEditedTaskId] = useState(null);
 
-  const handleEditTask = (taskId) => {
+  const handleEditTask = (task) => {
     setEditedTaskId(task.id);
   };
 
@@ -26,7 +27,7 @@ const TaskList = ({ tasks, onTaskDelete, setTasks }) => {
         // 2. Update the task in the state directly for immediate UI feedback
         tasks[taskIndex] = updatedTask;
         setTasks([...tasks]); // Trigger a re-render with the updated state
-      
+
         // 2. Persist changes asynchronously
         await writeTasksToFile(tasks);
     
@@ -57,7 +58,7 @@ const TaskList = ({ tasks, onTaskDelete, setTasks }) => {
           />
           {editedTaskId === task.id && (
             <TaskEdit
-            task={{task}}
+            task={task}
               onTaskUpdate={handleUpdateTask}
               onClose={() => handleCloseEdit(task.id)}
             />

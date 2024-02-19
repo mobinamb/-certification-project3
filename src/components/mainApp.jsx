@@ -1,14 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import AddTaskForm from './AddTaskForm'; // Import  AddTaskForm component
 import TaskList from './TaskList'; // Import TaskList component
+import FilterBar from './FilterBar';
 // Import necessary functions for file operations (replace with your implementation)
 import { readTasksFromFile, writeTasksToFile } from '../utils/fileOperations';
 import { Link } from "react-router-dom";
 
+function filterTasks(tasks, selectedFilters) {
+  return tasks.filter((task) => {
+    // Check each filter condition:
+    const priorityMatches = !selectedFilters.priority || task.priority === selectedFilters.priority;
+    const statusMatches = !selectedFilters.completion || task.completion === selectedFilters.completion;
+    const isTodaysTask = !selectedFilters.todayOnly || isToday(task.dueDate); 
+
+    return priorityMatches && statusMatches && isTodaysTask;
+  });
+}
+
+// Helper function to check if a task is due today:
+/*function isToday(dueDate) {
+  const today = new Date();
+  const taskDate = new Date(dueDate);
+  return today.getFullYear() === taskDate.getFullYear() &&
+         today.getMonth() === taskDate.getMonth() &&
+         today.getDate() === taskDate.getDate();
+}*/
+
+      
+function isToday(dueDate) {
+  const today = new Date();
+  const taskDate = new Date(dueDate);
+
+  // Convert taskDate to the user's local timezone
+  const userTimeZoneOffset = today.getTimezoneOffset() / 60;
+  taskDate.setHours(taskDate.getHours() + userTimeZoneOffset);
+
+  // Compare dates in the user's local timezone
+  return (
+    today.toLocaleDateString() === taskDate.toLocaleDateString()
+  );
+}
+
 
 const mainApp = () => {
   const [tasks, setTasks] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({}); // Track selected filters
   const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const [filteredTasks, setFilteredTasks] = useState([]); // Add the missing state variable
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -25,6 +63,7 @@ const mainApp = () => {
 
     fetchTasks();
   }, []);
+
 
   const handleTaskAdd = async (newTask) => {
     try {
@@ -59,6 +98,18 @@ const mainApp = () => {
     }
   };
 
+  const handleFilterChange = (newFilters) => {
+    setSelectedFilters({ ...selectedFilters, ...newFilters }); // Update filters
+  };
+
+  useEffect(() => {
+    // Recalculate filtered tasks based on updated tasks and filters
+    const newFilteredTasks = filterTasks(tasks, selectedFilters);
+    setFilteredTasks(newFilteredTasks);
+  }, [tasks, selectedFilters]);
+  //filteredTasks = filterTasks(tasks, selectedFilters); // Apply filters
+
+
   return (
     <div className="app-container">
       <Link to="/">
@@ -70,8 +121,9 @@ const mainApp = () => {
       ) : (
         <>
           <AddTaskForm onTaskAdd={handleTaskAdd} />
+          <FilterBar onFilterChange={handleFilterChange} />
           <TaskList
-            tasks={tasks}
+            tasks={filteredTasks}
             onTaskDelete={handleTaskDelete}
             onTaskEdit={handleTaskEdit}
             setTasks={setTasks}
