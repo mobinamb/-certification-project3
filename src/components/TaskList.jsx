@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import TaskEdit from './TaskEdit';
 import Task from './Task';
 
-import { readTasksFromFile, writeTasksToFile } from '../utils/fileOperations';
-
 const TaskList = ({ tasks, onTaskDelete, setTasks}) => {
   // State for currently edited task ID
   const [editedTaskId, setEditedTaskId] = useState(null);
@@ -29,8 +27,11 @@ const TaskList = ({ tasks, onTaskDelete, setTasks}) => {
         setTasks([...tasks]); // Trigger a re-render with the updated state
 
         // 2. Persist changes asynchronously
-        await writeTasksToFile(tasks);
-    
+        /*if (selectedFilePath) {
+        await writeTasksToFile(selectedFilePath,tasks);
+        } else {
+          console.error('No file path selected.');
+        }*/
         // 3. Close edit form and provide success feedback
         setEditedTaskId(null);
 
