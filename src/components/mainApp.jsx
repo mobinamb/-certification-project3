@@ -173,9 +173,11 @@ const handleSaveButtonClick = async () => {
 
   return (
     <div className="app-container">
-      <Link to="/">
-        <h1>Back to Home</h1>
-      </Link>
+      
+      <button className="back-to-home-button">
+      <Link to="/">Back to Home</Link>
+    </button>
+    
       <h1>My Quiz Task List</h1>
       {isLoading ? (
         <p>Loading tasks...</p>
@@ -199,6 +201,8 @@ const handleSaveButtonClick = async () => {
       )}
     </div>
   );
+
+  
 };
 
 export default mainApp;

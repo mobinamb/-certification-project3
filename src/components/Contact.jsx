@@ -38,13 +38,11 @@ const Contact = () => {
   };
 
   return (
-    <div className="contact-container">
-      <Link to="/">
-        <h1>Back to Home</h1>
-      </Link>
-
+    <div className="contact-container">    
+      <button className="back-to-home-button">
+        <Link to="/">Back to Home</Link>
+      </button>
       <h2>Contact Us</h2>
-
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
@@ -71,6 +69,8 @@ const Contact = () => {
         </div>
         <button type="submit">Send Feedback</button>
       </form>
+
+      
     </div>
   );
 };

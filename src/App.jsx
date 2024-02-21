@@ -34,24 +34,34 @@ const App = () => {
   }, []);
   return (
     <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/mainApp">MainApp</Link>
-          </li>
-          <li>
-            <Link to="/Contact">Contact</Link>
-          </li>
-        </ul>
-      </nav>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/mainApp" element={<MainApp />} />
-        <Route path="/Contact" element={<Contact />} />
-      </Routes>
+      <div className="container">
+        <header>
+          <nav>
+            <ul className="header-nav"> {/* Apply a class name to the ul element */}
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/mainApp">MainApp</Link>
+              </li>
+              <li>
+                <Link to="/Contact">Contact</Link>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/mainApp" element={<MainApp />} />
+          <Route path="/Contact" element={<Contact />} />
+        </Routes>
+
+        <footer>
+          <p>Developed by: Mobina Mobaraki</p>
+          <p>&copy; 2024 Certification Project III, CiC Program</p>
+        </footer>
+      </div>
     </Router>
   );
 };
