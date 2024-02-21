@@ -20,22 +20,22 @@ Redux integration for advanced state management.
 
 # Component Tree Diagram
 
-App
-├── Home
-
-├── MainApp
-
-│   ├── AddTaskForm
-
-│   ├── FilterBar
-
-│   ├── TaskList
-
-│   │   ├── Task
-
-│   │   └── TaskEdit
-
-└── Contact
+  App
+    ├── Home
+    
+    ├── MainApp
+    
+    │   ├── AddTaskForm
+    
+    │   ├── FilterBar
+    
+    │   ├── TaskList
+    
+    │   │   ├── Task
+    
+    │   │   └── TaskEdit
+    
+    └── Contact
 
 ## Description of each component:
 
