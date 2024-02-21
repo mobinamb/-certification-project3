@@ -22,12 +22,19 @@ Redux integration for advanced state management.
 
 App
 ├── Home
+
 ├── MainApp
+
 │   ├── AddTaskForm
+
 │   ├── FilterBar
+
 │   ├── TaskList
+
 │   │   ├── Task
+
 │   │   └── TaskEdit
+
 └── Contact
 
 ## Description of each component:
