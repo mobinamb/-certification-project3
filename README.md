@@ -50,6 +50,13 @@ handleKeyDown: Listens for a key press event and prompts the user to confirm exi
 # MainApp Component
 
 Functionality: Represents the main application interface where users can manage tasks.
+
+* This component serves as the main container for your task management application.
+* It manages the state of tasks, loading status, filtered tasks, and the selected file for tasks.
+* It utilizes Redux for state management, including actions like adding tasks, editing tasks, setting filters, and setting loading status.
+* It includes components like AddTaskForm, TaskList, and FilterBar.
+* It handles file input for selecting JSON files, saving filtered tasks to a JSON file, and fetching tasks from a selected file.
+
 Props: None.
 State:
 tasks: Stores the list of tasks.
@@ -73,6 +80,10 @@ isToday: Checks if a task is due today.
 # AddTaskForm Component
 
 Functionality: Provides a form for users to add new tasks.
+
+* This component provides a form for users to add new tasks.
+* It performs form validation and communicates with the parent component (mainApp) to add new tasks.
+
 Props:
 onTaskAdd: Callback function to handle the addition of a new task.
 State:
@@ -88,6 +99,9 @@ validateForm: Validates form fields.
 # FilterBar Component
 
 Functionality: Provides filter options for users to filter tasks based on priority, completion status, and due date.
+
+* This component provides filtering options for tasks based on priority, completion status, and due date.
+* It communicates with the parent component (mainApp) to apply filters to the task list.
 Props:
 onFilterChange: Callback function to handle filter changes.
 State:
@@ -102,10 +116,14 @@ handleDateOptionChange: Handles changes in due date filter option.
 # TaskList Component
 
 Functionality: Displays a list of tasks and manages task editing functionality.
+
+* This component displays the list of tasks.
+* It includes functionality to edit and delete tasks.
+* It utilizes Redux actions to update tasks and handle task deletions.
+
 Props:
 tasks: Array of tasks to display.
 onTaskDelete: Callback function to handle task deletion.
-setTasks: Setter function to update the tasks.
 State:
 editedTaskId: Stores the ID of the task being edited.
 Functions:
@@ -116,6 +134,11 @@ handleUpdateTask: Handles updating task data.
 # Task Component
 
 Functionality: Represents an individual task item and manages task editing state.
+* This component represents an individual task item.
+* It allows users to edit and delete tasks.
+* It communicates with the parent component (TaskList) to handle task updates and deletions.
+
+
 Props:
 task: Task object containing task details.
 onTaskEdit: Callback function to handle task editing.
@@ -131,6 +154,9 @@ handleInputChange: Handles input changes during task editing.
 # TaskEdit Component
 
 Functionality: Provides a form for editing task details.
+* This component provides a form for editing task details.
+* It communicates with the parent component (TaskList) to handle task updates.
+
 Props:
 task: Task object containing task details.
 onTaskUpdate: Callback function to handle task updates.
