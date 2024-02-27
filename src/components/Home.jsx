@@ -27,38 +27,38 @@ const Home = () => {
       
       <h2>Component Tree Diagram:</h2>
 
-      <div class="component-diagram">
-    <ul class="component-tree">
+      <div className="component-diagram">
+    <ul className="component-tree">
         <li>
-            <span class="component-name">App</span>
+            <span className="component-name">App</span>
             <ul>
                 <li>
-                    <span class="component-name">Home</span>
+                    <span className="component-name">Home</span>
                 </li>
                 <li>
-                    <span class="component-name">MainApp</span>
+                    <span className="component-name">MainApp</span>
                     <ul>
                         <li>
-                            <span class="component-name">AddTaskForm</span>
+                            <span className="component-name">AddTaskForm</span>
                         </li>
                         <li>
-                            <span class="component-name">FilterBar</span>
+                            <span className="component-name">FilterBar</span>
                         </li>
                         <li>
-                            <span class="component-name">TaskList</span>
+                            <span className="component-name">TaskList</span>
                             <ul>
                                 <li>
-                                    <span class="component-name">Task</span>
+                                    <span className="component-name">Task</span>
                                 </li>
                                 <li>
-                                    <span class="component-name">TaskEdit</span>
+                                    <span className="component-name">TaskEdit</span>
                                 </li>
                             </ul>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <span class="component-name">Contact</span>
+                    <span className="component-name">Contact</span>
                 </li>
             </ul>
         </li>

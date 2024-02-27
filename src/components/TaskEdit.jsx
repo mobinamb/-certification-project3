@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const TaskEdit = ({ task, handleUpdateTask, onClose }) => {
+const TaskEdit = ({ task, onTaskUpdate, onClose }) => {
   // State for form fields (pre-populated with task data)
   const [title, setTitle] = useState(task.title);
   const [priority, setPriority] = useState(task.priority);

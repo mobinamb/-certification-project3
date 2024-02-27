@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import TaskEdit from './TaskEdit';
 import Task from './Task';
+import { useDispatch } from 'react-redux';
+import { deleteTask, updateTask, setTasks} from './actions';
 
-const TaskList = ({ tasks, onTaskDelete, setTasks}) => {
+const TaskList = ({tasks}) => {
   // State for currently edited task ID
   const [editedTaskId, setEditedTaskId] = useState(null);
-
+  const dispatch = useDispatch();
   const handleEditTask = (task) => {
     setEditedTaskId(task.id);
   };
@@ -17,35 +19,32 @@ const TaskList = ({ tasks, onTaskDelete, setTasks}) => {
   // Function to handle task updates (async for file persistence)
   const handleUpdateTask = async (updatedTask) => {
     try {
-      
-      // 1. Update tasks state directly for immediate UI update
-      const taskIndex = tasks.findIndex((task) => task.id === updatedTask.id);
+      // Dispatch the action to update the task in the Redux store
+    dispatch(updateTask(updatedTask)); // Dispatch the action with the updated task
+    // Close edit form and provide success feedback
+    setEditedTaskId(null);
+  } catch (error) {
+    // Handle errors gracefully
+    console.error('Error updating task:', error);
+    alert('Failed to update task. Please try again.');
+  }
+};
 
-      if (taskIndex !== -1) {
-        // 2. Update the task in the state directly for immediate UI feedback
-        tasks[taskIndex] = updatedTask;
-        setTasks([...tasks]); // Trigger a re-render with the updated state
+const handleTaskDelete = async (taskId) => {
+  try {
+    // Dispatch the action to delete the task in the Redux store
+    dispatch(deleteTask(taskId));
 
-        // 2. Persist changes asynchronously
-        /*if (selectedFilePath) {
-        await writeTasksToFile(selectedFilePath,tasks);
-        } else {
-          console.error('No file path selected.');
-        }*/
-        // 3. Close edit form and provide success feedback
-        setEditedTaskId(null);
 
-        //alert('Task updated successfully!');
-
-      } else {
-        console.error('Task with ID', updatedTask.id, 'not found.');
-      }
-    } catch (error) {
-      // Handle errors gracefully
-      console.error('Error updating task:', error);
-      alert('Failed to update task. Please try again.');
-    }
-  };
+    // Update the list of tasks after deletion
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    dispatch(setTasks(updatedTasks));
+  } catch (error) {
+    // Handle errors gracefully
+    console.error('Error deleting task:', error);
+    alert('Failed to delete task. Please try again.');
+  }
+};
 
   return (
     <ul className="task-list">
@@ -53,15 +52,15 @@ const TaskList = ({ tasks, onTaskDelete, setTasks}) => {
         <li key={task.id}> 
           <Task
             task={task}
-            onTaskDelete={() => onTaskDelete(task.id)}
-            onTaskEdit={() => handleEditTask(task.id)}
-            onTaskUpdate={(updatedTask) => handleUpdateTask(updatedTask)}
+            onTaskEdit={handleEditTask}
+            onTaskUpdate={handleUpdateTask}
+            onTaskDelete={handleTaskDelete} // Pass the handleTaskDelete function as a prop
           />
           {editedTaskId === task.id && (
             <TaskEdit
             task={task}
               onTaskUpdate={handleUpdateTask}
-              onClose={() => handleCloseEdit(task.id)}
+              onClose={() => handleCloseEdit}
             />
           )}
           
