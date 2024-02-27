@@ -7,3 +7,4 @@ export const deleteTask = createAction('tasks/deleteTask');
 export const setFilter = createAction('tasks/setFilter');
 export const setLoading = createAction('tasks/setLoading');
 export const setTasks = createAction('tasks/setTasks');
+export const updateTask = createAction('tasks/updateTask');

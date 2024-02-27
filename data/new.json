@@ -2,16 +2,17 @@
   {
     "id": 1,
     "title": "Task 11",
-    "priority": "high",
+    "priority": "low",
     "status": "todo",
-    "dueDate": "2024-02-21",
-    "completion": "todo"
+    "dueDate": "2024-02-26",
+    "completion": "completed"
   },
   {
-    "title": "Task12",
-    "priority": "high",
-    "completion": "completed",
-    "dueDate": "2024-02-26",
-    "id": 1708994893851
+    "id": 2,
+    "title": "Task 2",
+    "priority": "medium",
+    "status": "in progress",
+    "dueDate": "2024-02-25",
+    "completion": "completed"
   }
 ]

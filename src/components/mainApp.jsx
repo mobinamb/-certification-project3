@@ -5,7 +5,7 @@ import FilterBar from './FilterBar';
 // Import necessary functions for file operations (replace with your implementation)
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { addTask, editTask, deleteTask, setFilter, setLoading, setTasks} from './actions';
+import { addTask, editTask, setFilter, setLoading, setTasks} from './actions';
 
 function filterTasks(tasks, selectedFilters) {
   return tasks.filter((task) => {
@@ -140,17 +140,6 @@ const handleSaveButtonClick = async (filteredTasks) => {
     }
   };
 
-  const handleTaskDelete = async (taskId) => {
-    try {
-      const updatedTasks = tasks.filter((task) => task.id !== taskId);
-      //setTasks(updatedTasks); // Update state immediately for UI feedback
-      dispatch(deleteTask(updatedTasks));
-    } catch (error) {
-      console.error('Error deleting task:', error);
-      // Handle error gracefully (e.g., revert local state update)
-    }
-  };
-
   const handleTaskEdit = async (updatedTask) => {
     try {
       const updatedTasks = tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task));
@@ -196,7 +185,6 @@ const handleSaveButtonClick = async (filteredTasks) => {
           <FilterBar onFilterChange={handleFilterChange} />
           <TaskList
             tasks={filteredTasks}
-            onTaskDelete={handleTaskDelete}
             onTaskEdit={handleTaskEdit}
             //setTasks={setTasks}
           />

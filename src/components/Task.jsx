@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteTask} from './actions'; // Import the deleteTask action
 
-const Task = ({ task, onTaskEdit, onTaskUpdate, onTaskDelete }) => {
+
+const Task = ({ task, onTaskUpdate, onTaskDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updatedTask, setUpdatedTask] = useState({ ...task }); // Initialize with original task data
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(deleteTask(task.id)); // Dispatch deleteTask action with task id
+    onTaskDelete(task.id); // Inform parent component about the deletion
+
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -76,7 +86,7 @@ const Task = ({ task, onTaskEdit, onTaskUpdate, onTaskDelete }) => {
           {task.dueDate && <p>Due Date: {task.dueDate}</p>}
           <div className="task-actions">
             <button onClick={() => setIsEditing(true)}>Edit</button>
-            <button onClick={() =>onTaskDelete(task.id)}>Delete</button>
+            <button onClick={handleDelete}>Delete</button>
           </div>
         </>
       )}

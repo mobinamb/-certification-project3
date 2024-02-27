@@ -1,4 +1,3 @@
-// reducers.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -33,9 +32,19 @@ const taskSlice = createSlice({
     },
     setTasks: (state, action) => {
       state.tasks = action.payload;
-    }
+    },
+    updateTask: (state, action) => {
+      // Find the index of the task to update
+      const updatedTaskIndex = state.tasks.findIndex(
+        (task) => task.id === action.payload.id
+      );
+      // Update the task if found
+      if (updatedTaskIndex !== -1) {
+        state.tasks[updatedTaskIndex] = action.payload;
+      }
+    },
   },
 });
 
-export const { addTask, editTask, deleteTask, setFilter, setLoading, setTasks } = taskSlice.actions;
+export const { addTask, editTask, deleteTask, setFilter, setLoading, setTasks, updateTask } = taskSlice.actions;
 export default taskSlice.reducer;
