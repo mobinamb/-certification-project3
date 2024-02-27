@@ -6,12 +6,5 @@
     "status": "todo",
     "dueDate": "2024-02-21",
     "completion": "todo"
-  },
-  {
-    "title": "Task12",
-    "priority": "high",
-    "completion": "completed",
-    "dueDate": "2024-02-26",
-    "id": 1708994893851
   }
 ]

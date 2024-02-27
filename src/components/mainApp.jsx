@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import AddTaskForm from './AddTaskForm'; // Import  AddTaskForm component
+import AddTaskForm from './AddTaskForm'; // Import  AddTaskForm component
 import TaskList from './TaskList'; // Import TaskList component
 import FilterBar from './FilterBar';
 // Import necessary functions for file operations (replace with your implementation)
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { addTask, editTask, deleteTask, setFilter, setLoading, setTasks} from './actions';
 
 function filterTasks(tasks, selectedFilters) {
   return tasks.filter((task) => {
@@ -15,16 +17,6 @@ function filterTasks(tasks, selectedFilters) {
     return priorityMatches && statusMatches && isTodaysTask;
   });
 }
-
-// Helper function to check if a task is due today:
-/*function isToday(dueDate) {
-  const today = new Date();
-  const taskDate = new Date(dueDate);
-  return today.getFullYear() === taskDate.getFullYear() &&
-         today.getMonth() === taskDate.getMonth() &&
-         today.getDate() === taskDate.getDate();
-}*/
-
       
 function isToday(dueDate) {
   const today = new Date();
@@ -42,9 +34,13 @@ function isToday(dueDate) {
 
 
 const mainApp = () => {
-  const [tasks, setTasks] = useState([]);
-  const [selectedFilters, setSelectedFilters] = useState({}); // Track selected filters
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
+  //const [tasks, setTasks] = useState([]);
+  const tasks = useSelector((state) => state.tasks.tasks);
+  const isLoading = useSelector((state) => state.tasks.isLoading); // Access loading state
+  const dispatch = useDispatch();
+  const selectedFilters = useSelector(state => state.tasks.selectedFilters);
+  //const [selectedFilters, setSelectedFilters] = useState({}); // Track selected filters
+  //const [isLoading, setIsLoading] = useState(true); // Track loading state
   const [filteredTasks, setFilteredTasks] = useState([]); // Add the missing state variable
   const [file, setFile] = useState(null);
   
@@ -84,12 +80,13 @@ const mainApp = () => {
   
 
 // Button click handler to trigger the save operation
-const handleSaveButtonClick = async () => {
-  // Perform filtering of tasks based on user-specified criteria
-  const filteredTasks = filterTasks(tasks,selectedFilters); // Implement your filtering logic here
-
-  // Save filtered tasks to JSON file
-  await saveTasksToFile(filteredTasks);
+const handleSaveButtonClick = async (filteredTasks) => {
+  try {
+    // Save filtered tasks to JSON file
+    await saveTasksToFile(filteredTasks);
+  } catch (error) {
+    console.error('Error saving tasks:', error);
+  }
 };
 
 
@@ -103,7 +100,8 @@ const handleSaveButtonClick = async () => {
 
     try {
       const loadedTasks = await readTasksFromFile(file); // Pass the file object directly
-      setTasks(loadedTasks);
+      //setTasks(loadedTasks);
+      dispatch(setTasks(loadedTasks));
       setFile(file);
   } catch (error) {
       console.error('Error reading file:', error);
@@ -115,24 +113,27 @@ const handleSaveButtonClick = async () => {
       try {
         if(file){
         const loadedTasks = await readTasksFromFile(file);
-        setTasks(loadedTasks);
+        //setTasks(loadedTasks);
+        dispatch(setTasks(loadedTasks));
         }
       } catch (error) {
         console.error('Error fetching tasks:', error);
         // Handle error gracefully (e.g., display an error message)
       } finally {
-        setIsLoading(false);
+        //setIsLoading(false);
+        dispatch(setLoading(false)); // Update isLoading state using redux action
       }
     };
 
     fetchTasks();
-  }, [file]);
+  }, [file,dispatch]);
 
 
   const handleTaskAdd = async (newTask) => {
     try {
       newTask.id = Date.now();
-      setTasks([...tasks, newTask]); // Update state immediately for UI feedback
+      //setTasks([...tasks, newTask]); // Update state immediately for UI feedback
+      dispatch(addTask(newTask));
 
     } catch (error) {
       console.error('Error adding task:', error);
@@ -142,8 +143,8 @@ const handleSaveButtonClick = async () => {
   const handleTaskDelete = async (taskId) => {
     try {
       const updatedTasks = tasks.filter((task) => task.id !== taskId);
-      setTasks(updatedTasks); // Update state immediately for UI feedback
-
+      //setTasks(updatedTasks); // Update state immediately for UI feedback
+      dispatch(deleteTask(updatedTasks));
     } catch (error) {
       console.error('Error deleting task:', error);
       // Handle error gracefully (e.g., revert local state update)
@@ -153,15 +154,17 @@ const handleSaveButtonClick = async () => {
   const handleTaskEdit = async (updatedTask) => {
     try {
       const updatedTasks = tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task));
-      setTasks(updatedTasks); // Update state immediately for UI feedback
-        } catch (error) {
+      //setTasks(updatedTasks); // Update state immediately for UI feedback
+      dispatch(editTask(updatedTasks));
+    } catch (error) {
       console.error('Error updating task:', error);
       // Handle error gracefully (e.g., revert local state update)
     }
   };
 
   const handleFilterChange = (newFilters) => {
-    setSelectedFilters({ ...selectedFilters, ...newFilters }); // Update filters
+    //setSelectedFilters({ ...selectedFilters, ...newFilters }); // Update filters
+    dispatch(setFilter(newFilters));
   };
 
   useEffect(() => {
@@ -187,7 +190,7 @@ const handleSaveButtonClick = async () => {
           {/* File input for selecting JSON file */}
           <input type="file" onChange={handleFileChange} accept=".json" />
           
-          <button onClick={handleSaveButtonClick}>Save Filtered Tasks</button>
+          <button onClick={() => handleSaveButtonClick(filterTasks(tasks, selectedFilters))}>Save Filtered Tasks</button>
 
           <AddTaskForm onTaskAdd={handleTaskAdd} />
           <FilterBar onFilterChange={handleFilterChange} />
@@ -195,7 +198,7 @@ const handleSaveButtonClick = async () => {
             tasks={filteredTasks}
             onTaskDelete={handleTaskDelete}
             onTaskEdit={handleTaskEdit}
-            setTasks={setTasks}
+            //setTasks={setTasks}
           />
         </>
       )}
