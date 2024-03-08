@@ -1,0 +1,324 @@
+/* Basic styles for navigation bar and content area */
+body {
+  font-family: Arial, sans-serif; /* Adjust font family as needed */
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* Set background color */
+}
+
+/* Common styles for header and footer */
+header, footer {
+  position: fixed; /* Set the position to fixed */
+  background-color: #343a40; /* Set background color for header and footer */
+  color: #fff; /* Set text color for header and footer */
+  text-align: center; /* Center text horizontally */
+  padding: 20px 0; /* Add padding */
+  align-items: center;
+  width: 100%;
+}
+
+.header-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex; /* Add flex display */
+}
+
+.header-nav li {
+  margin-right: 20px; /* Add spacing between list items */
+}
+
+.header-nav li:last-child {
+  margin-right: 0; /* Remove margin from the last list item */
+}
+
+
+/* Navigation styles */
+nav {
+  display: flex; /* Use flexbox for horizontal layout */
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff; /* Adjust text color */
+  padding: 10px 15px; /* Adjust padding */
+  font-size: 16px; /* Adjust font size */
+  margin: 0 10px; /* Add margin between navigation items */
+}
+
+nav a:hover {
+  background-color: #495057; /* Darken background color on hover */
+}
+
+main {
+  padding: 20px; /* Add padding to content area */
+}
+
+.app-container {
+  max-width: 300px; /* Set maximum width for content */
+  margin: 0 auto; /* Center content horizontally */
+  background-color: #fff; /* White background color */
+  padding: 20px; /* Add padding */
+  border-radius: 8px; /* Add border radius for rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow for depth */
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+h1 {
+  font-size: 24px; /* Set heading font size */
+  margin-top: 0; /* Remove default margin */
+  color: #343a40; /* Set heading color */
+}
+
+h2 {
+  font-size: 20px; /* Set subheading font size */
+  color: #343a40; /* Set subheading color */
+}
+
+p {
+  font-size: 16px; /* Set paragraph font size */
+  color: #495057; /* Set paragraph color */
+}
+
+ul {
+  list-style-type: none; /* Remove default list style */
+  padding: 0; /* Remove default list padding */
+}
+
+li {
+  margin-bottom: 10px; /* Add spacing between list items */
+}
+
+/* Form styles */
+form {
+  margin-bottom: 20px; /* Add spacing below form */
+}
+
+.form-group {
+  margin-bottom: 20px; /* Add spacing between form groups */
+}
+
+label {
+  font-weight: bold; /* Make labels bold */
+  color: #343a40; /* Set label color */
+}
+
+input,
+select,
+textarea {
+  width: 100%; /* Set input width to fill parent */
+  padding: 10px; /* Add padding to inputs */
+  border: 1px solid #ced4da; /* Add border */
+  border-radius: 4px; /* Add border radius */
+  box-sizing: border-box; /* Include padding and border in width */
+}
+
+input[type="submit"],
+button {
+  background-color: #343a40; /* Set button background color */
+  color: #fff; /* Set button text color */
+  border: none; /* Remove button border */
+  padding: 10px 20px; /* Add padding to buttons */
+  cursor: pointer; /* Add pointer cursor on hover */
+  border-radius: 4px; /* Add border radius */
+}
+
+input[type="submit"]:hover,
+button:hover {
+  background-color: #495057; /* Darken button background color on hover */
+}
+
+/* Error message styles */
+.error-message {
+  color: #dc3545; /* Set error message color */
+  font-size: 14px; /* Set error message font size */
+}
+
+/* Styling for task list */
+.task-item {
+  background-color: #f8f9fa; /* Light background color for task items */
+  padding: 20px; /* Add padding */
+  border-radius: 8px; /* Add border radius for rounded corners */
+  margin-bottom: 20px; /* Add spacing between task items */
+}
+
+.task-actions button {
+  margin-right: 10px; /* Add spacing between action buttons */
+}
+
+.task-actions button:last-child {
+  margin-right: 0; /* Remove margin from last action button */
+}
+
+.task-list {
+  padding: 0; /* Remove default padding */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Position the back-to-home button */
+.back-to-home-button {
+  position: absolute;
+  top: 20px; /* Adjust top positioning as needed */
+  right: 20px; /* Adjust right positioning as needed */
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 16px;
+  color: #f7f7f7;
+  cursor: pointer;
+}
+
+.back-to-home-button a {
+  text-decoration: none;
+  color: #f3f4f6;
+}
+
+.back-to-home-button:hover {
+  text-decoration: underline;
+}
+
+.contact-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 100px); /* Adjusted minimum height to leave space for the form */
+  padding-top: 5px; /* Increased top padding to move the form further up */
+}
+
+.contact-form {
+  width: 80%; /* Set the width of the form */
+  max-width: 600px; /* Set a maximum width to prevent the form from becoming too wide */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="email"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 14px;
+}
+
+button[type="submit"] {
+  background-color: #0f0f0f;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #0d0d0d;
+}
+
+
+.home-container {
+  padding-top: 100px;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.home-container h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.home-container h2 {
+  font-size: 24px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.home-container p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.home-container ul {
+  list-style: none; /* Remove default bullet points */
+  padding-left: 18px; /* Add padding to align text properly */
+}
+
+.home-container ul li {
+  font-size: 18px;
+  margin-bottom: 10px;
+  position: relative; /* Position the pseudo-element */
+}
+
+.home-container ul li::before {
+  content: "\2713"; /* Unicode character for checkmark */
+  color: rgb(7, 7, 7); /* Color of the checkmark */
+  font-size: 20px; /* Size of the checkmark */
+  position: absolute; /* Position relative to the list item */
+  left: -20px; /* Adjust position to align with the text */
+}
+.component-diagram {
+  margin-bottom: 40px;
+}
+
+.component-tree {
+  list-style: none;
+  padding: 0;
+}
+
+.component-tree .component-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.component-tree ul {
+  margin-top: 10px;
+  list-style-type: none; /* Remove bullet points */
+}
+
+.component-tree li {
+  margin-left: 20px; /* Add indentation for hierarchy */
+}
+
+/* Footer styles */
+footer {
+  position: fixed; /* Set the position to fixed */
+  background-color: #343a40;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  display: flex; /* Set display to flex */
+  justify-content: center; /* Center items horizontally */
+  align-items: center; /* Center items vertically */
+  bottom: 0; /* Align the footer to the bottom of the viewport */
+  width :100%;
+}
+
+footer p {
+  margin: 0 10px; /* Adjust margin for spacing between items */
+  color: #fff;
+}
