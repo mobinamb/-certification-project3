@@ -26,14 +26,14 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST a new task under a specific basket (category)
+// POST a new task
 router.post('/:categoryId', async (req, res) => {
   const { categoryId } = req.params;
 
   try {
-    // Check if the basket exists
-    const basket = await Category.findById(categoryId);
-    if (!basket) {
+    // Check if the category exists
+    const category = await Category.findById(categoryId);
+    if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
 
@@ -49,9 +49,9 @@ router.post('/:categoryId', async (req, res) => {
     // Save the task
     const savedTask = await task.save();
 
-    // Update the basket's tasks array
-    basket.tasks.push(savedTask._id);
-    await basket.save();
+    // Update the category's tasks array
+    category.tasks.push(savedTask._id);
+    await category.save();
 
     res.status(201).json(savedTask);
   } catch (err) {
@@ -59,14 +59,14 @@ router.post('/:categoryId', async (req, res) => {
   }
 });
 
-// DELETE a specific task under a specific basket (category)
+// DELETE a specific task
 router.delete('/:categoryId/:taskId', async (req, res) => {
   const { categoryId, taskId } = req.params;
 
   try {
-    // Check if the basket exists
-    const basket = await Category.findById(categoryId);
-    if (!basket) {
+    // Check if the category exists
+    const category = await Category.findById(categoryId);
+    if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
 
@@ -76,17 +76,16 @@ router.delete('/:categoryId/:taskId', async (req, res) => {
       return res.status(404).json({ message: 'Task not found' });
     }
 
-    // Remove the task from the basket's tasks array
-    basket.tasks.pull(task._id);
-    await basket.save();
+    // Remove the task from the category's tasks array
+    category.tasks.pull(task._id);
+    await category.save();
 
     // Remove the task from the database
     await Task.findByIdAndDelete(taskId);
 
     res.json({ message: 'Deleted task' });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: err.message });
   }
 });
 
