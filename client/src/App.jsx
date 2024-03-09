@@ -6,6 +6,8 @@ import {
 } from 'react-router-dom'
 
 import React, { useEffect } from 'react';
+import LoginForm from './components/LoginForm'; // Import the Login component
+
 /**
  * Importing other components
  */
@@ -47,6 +49,9 @@ const App = () => {
               <li>
                 <Link to="/Contact">Contact</Link>
               </li>
+              <li>
+                <Link to="/loginForm">Login</Link> {/* Add a link to the login page */}
+              </li>
             </ul>
           </nav>
         </header>
@@ -55,6 +60,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/mainApp" element={<MainApp />} />
           <Route path="/Contact" element={<Contact />} />
+          <Route path="/loginForm" element={<LoginForm />} /> {/* Add the route for the login page */}
         </Routes>
 
         <footer>
