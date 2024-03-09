@@ -1,34 +1,36 @@
+// Login form component
 import React, { useState } from 'react';
+import axios from 'axios';
+import '../style.css';
 
 const LoginForm = () => {
-  // State to manage form fields
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
 
-  // Event handler to update form fields on input change
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Event handler for form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Logic for handling form submission (e.g., API call)
-    console.log('Form submitted:', formData);
-    // Clear form fields after submission
-    setFormData({
-      username: '',
-      password: ''
-    });
+    try {
+      const response = await axios.post('/api/login', formData);
+      // Assuming the server returns a token upon successful login
+      document.cookie = `token=${response.data.token};path=/;max-age=3600`; // Set cookie with token (example: 1 hour expiration)
+      // Redirect or update state to reflect logged-in state
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
+  
 
   return (
-    <div className="contact-container"> {/* Apply the same container class as the contact form */}
+    <div className="login-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="contact-form"> {/* Apply the same form class as the contact form */}
+      <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
@@ -38,6 +40,7 @@ const LoginForm = () => {
             value={formData.username}
             onChange={handleInputChange}
             required
+            style={{ width: '50%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
           />
         </div>
         <div className="form-group">
@@ -49,9 +52,10 @@ const LoginForm = () => {
             value={formData.password}
             onChange={handleInputChange}
             required
+            style={{ width: '50%', padding: '10px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' }}
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" style={{ backgroundColor: '#343a40', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>Login</button>
       </form>
     </div>
   );
