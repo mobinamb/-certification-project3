@@ -6,12 +6,12 @@ import {
 } from 'react-router-dom'
 
 import React, { useEffect } from 'react';
-import LoginForm from './components/LoginForm'; // Import the Login component
+
 
 /**
  * Importing other components
  */
-
+import LoginForm from './components/LoginForm'; // Import the Login component
 import Home from './components/Home';
 import Contact from './components/Contact';
 import MainApp from './components/mainApp';

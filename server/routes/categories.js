@@ -3,74 +3,78 @@ const router = express.Router();
 const Category = require('../models/Category');
 const Person = require('../models/Person');
 
-// GET all baskets (categories)
-router.get('/', async (req, res) => {
+// GET all categories under a specific person
+router.get('/:personId', async (req, res) => {
   try {
-    const baskets = await Category.find();
-    res.json(baskets);
+    const { personId } = req.params;
+    const categories = await Category.find({ person: personId });
+    res.json(categories);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// GET a specific basket (category)
-router.get('/:id', async (req, res) => {
+// GET a specific category under a specific person
+router.get('/:personId/:categoryId', async (req, res) => {
   try {
-    const basket = await Category.findById(req.params.id).populate('tasks');
-    if (basket == null) {
+    const { personId, categoryId } = req.params;
+    const category = await Category.findOne({ _id: categoryId, person: personId });
+    if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
-    res.json(basket);
+    res.json(category);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// POST a new basket (category)
+// POST a new category under a specific person
+// POST a new category under a specific person
 router.post('/:personId', async (req, res) => {
   const { name } = req.body;
-  const personId = req.params.personId;
+  const { personId } = req.params; // Retrieve personId from the URL params
   try {
     // Check if the person exists
     const person = await Person.findById(personId);
     if (!person) {
       return res.status(404).json({ message: 'Person not found' });
     }
-    const basket = new Category({
+    const category = new Category({
       name: name,
-      owner: personId
+      person: personId // Assign the person ID to the category
     });
-    const savedBasket = await basket.save();
-    // Add the new basket to the person's baskets
-    person.baskets.push(savedBasket._id);
+    const savedCategory = await category.save();
+
+    // Update the person's categories array
+    person.categories.push(savedCategory._id);
     await person.save();
-    res.status(201).json(savedBasket);
+
+    res.status(201).json(savedCategory);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
-// DELETE a specific basket (category)
-router.delete('/:basketId/:personId', async (req, res) => {
-  const basketId = req.params.basketId;
-  const personId = req.params.personId;
+
+// DELETE a specific category under a specific person
+router.delete('/:personId/:categoryId', async (req, res) => {
+  const { personId, categoryId } = req.params;
   try {
-    // Find the basket
-    const basket = await Category.findById(basketId);
-    if (!basket) {
-      return res.status(404).json({ message: 'Basket not found' });
+    // Find the category
+    const category = await Category.findOne({ _id: categoryId, person: personId });
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
     }
-    // Find the person
+    // Remove the category from the person's categories
     const person = await Person.findById(personId);
     if (!person) {
       return res.status(404).json({ message: 'Person not found' });
     }
-    // Remove the basket from the person's baskets
-    person.baskets.pull(basketId);
+    person.categories.pull(categoryId);
     await person.save();
-    // Delete the basket
-    await Category.findByIdAndDelete(basketId);
-    res.json({ message: 'Deleted basket' });
+    // Delete the category
+    await Category.findByIdAndDelete(categoryId);
+    res.json({ message: 'Deleted category' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

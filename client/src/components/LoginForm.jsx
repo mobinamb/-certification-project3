@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../style.css';
-
+import CreateCategoryForm from './CreateCategoryForm'; // Import CreateCategoryForm
+import TaskList from './TaskList'; // Import TaskList component
 import config from '../../config';
 
 const LoginForm = () => {
+  const [personId, setPersonId] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [tasks, setTasks] = useState(null); // Initialize tasks to null initially
+
   const [loginFormData, setLoginFormData] = useState({
     loginUsername: '',
     loginPassword: ''
@@ -37,7 +42,7 @@ const LoginForm = () => {
       });
       document.cookie = `token=${response.data.token};path=/;max-age=3600`;
       setLoginSuccessMessage('Login successful!');
-      // Redirect or update state to reflect logged-in state
+      setPersonId(response.data.personId);
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -51,14 +56,31 @@ const LoginForm = () => {
         password: registerFormData.registerPassword
       });
       setRegisterSuccessMessage('Registration successful!');
-      // Handle registration success if needed
     } catch (error) {
       console.error('Registration failed:', error);
     }
   };
 
+  const handleFetchTasks = async () => {
+    try {
+      console.log(personId);
+      console.log(categoryId);
+      const response = await axios.get(`${config.API_BASE_URL}/api/categories/${personId}/${categoryId}`);
+      console.log('Tasks for category:', response.data);
+      setTasks(response.data); // Update tasks state with fetched data
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  const handleCategorySelect = (categoryId) => {
+    setCategoryId(categoryId);
+  };
+
   return (
     <div className="login-container">
+      <CreateCategoryForm personId={personId} onCreateCategory={handleCategorySelect} />
+      <button onClick={handleFetchTasks}>Fetch Tasks</button>
       <div className="form-box">
         <h2>Login</h2>
         <form onSubmit={handleLoginSubmit} className="login-form">
@@ -118,6 +140,11 @@ const LoginForm = () => {
           {registerSuccessMessage && <p>{registerSuccessMessage}</p>}
         </form>
       </div>
+
+      {/* Render TaskList only if tasks is not null and is an array */}
+      {tasks && Array.isArray(tasks) && (
+        <TaskList tasks={tasks} />
+      )}
     </div>
   );
 };

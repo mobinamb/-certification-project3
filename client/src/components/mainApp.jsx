@@ -4,9 +4,11 @@ import TaskList from './TaskList'; // Import TaskList component
 import FilterBar from './FilterBar';
 // Import necessary functions for file operations (replace with your implementation)
 import { Link } from "react-router-dom";
+import CreateCategoryForm from './CreateCategoryForm'; // Import CreateCategoryForm
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, editTask, setFilter, setLoading, setTasks} from './actions';
-
+import config from '../../config';
+import axios from 'axios';
 function filterTasks(tasks, selectedFilters) {
   return tasks.filter((task) => {
     // Check each filter condition:
@@ -35,6 +37,7 @@ function isToday(dueDate) {
 
 const mainApp = () => {
   //const [tasks, setTasks] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const tasks = useSelector((state) => state.tasks.tasks);
   const isLoading = useSelector((state) => state.tasks.isLoading); // Access loading state
   const dispatch = useDispatch();
@@ -43,7 +46,29 @@ const mainApp = () => {
   //const [isLoading, setIsLoading] = useState(true); // Track loading state
   const [filteredTasks, setFilteredTasks] = useState([]); // Add the missing state variable
   const [file, setFile] = useState(null);
-  
+  const [personId, setPersonId] = useState('');
+
+
+
+
+  const handleCategorySelect = (categoryName) => {
+    setSelectedCategory(categoryName);
+  };
+
+  // Filter tasks based on selected category
+  useEffect(() => {
+    if (selectedCategory) {
+      const filteredTasks = tasks.filter(task => task.category === selectedCategory);
+      setFilteredTasks(filteredTasks);
+    } else {
+      // If no category selected, show all tasks
+      setFilteredTasks(tasks);
+    }
+  }, [selectedCategory, tasks]);
+
+
+
+
   const readTasksFromFile = async (file) => {
     try {
         const tasksJSON = await file.text(); // Read file content directly
@@ -78,7 +103,7 @@ const mainApp = () => {
     }
   };
   
-
+  
 // Button click handler to trigger the save operation
 const handleSaveButtonClick = async (filteredTasks) => {
   try {
@@ -88,7 +113,6 @@ const handleSaveButtonClick = async (filteredTasks) => {
     console.error('Error saving tasks:', error);
   }
 };
-
 
   // Function to handle file selection
   const handleFileChange = async (event) => {
@@ -131,10 +155,10 @@ const handleSaveButtonClick = async (filteredTasks) => {
 
   const handleTaskAdd = async (newTask) => {
     try {
-      newTask.id = Date.now();
-      //setTasks([...tasks, newTask]); // Update state immediately for UI feedback
-      dispatch(addTask(newTask));
-
+      // Make a POST request to your backend API
+      const response = await axios.post(`${config.API_BASE_URL}/api/tasks`, newTask);
+      console.log('Task added successfully:', response.data);
+      // Optionally, you can update the local state or trigger any other actions upon successful addition
     } catch (error) {
       console.error('Error adding task:', error);
     }
@@ -180,7 +204,7 @@ const handleSaveButtonClick = async (filteredTasks) => {
           <input type="file" onChange={handleFileChange} accept=".json" />
           
           <button onClick={() => handleSaveButtonClick(filterTasks(tasks, selectedFilters))}>Save Filtered Tasks</button>
-
+          
           <AddTaskForm onTaskAdd={handleTaskAdd} />
           <FilterBar onFilterChange={handleFilterChange} />
           <TaskList

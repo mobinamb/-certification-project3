@@ -5,7 +5,7 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  owner: {
+  person: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Person'
   },

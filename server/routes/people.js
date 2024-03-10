@@ -49,8 +49,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router;
-
 // DELETE a specific person
 router.delete('/:id', async (req, res) => {
   try {
