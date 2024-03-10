@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 const Person = require('../models/Person');
 const Basket = require('../models/Category');
 const Task = require('../models/Task');
@@ -30,18 +31,25 @@ router.get('/:id', async (req, res) => {
 // POST a new person
 router.post('/', async (req, res) => {
   const { username, password } = req.body;
-  const person = new Person({
-    username,
-    password
-  });
-
   try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 is the saltRounds
+
+    // Create a new Person instance with hashed password
+    const person = new Person({
+      username,
+      password: hashedPassword // Store the hashed password in the database
+    });
+
+    // Save the person to the database
     const savedPerson = await person.save();
     res.status(201).json(savedPerson);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
+
+module.exports = router;
 
 // DELETE a specific person
 router.delete('/:id', async (req, res) => {
