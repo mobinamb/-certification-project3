@@ -136,8 +136,9 @@ const MainApp = () => {
 
   const handleTaskAdd = async (newTask) => {
     try {
-      const response = await axios.post(`${config.API_BASE_URL}/api/tasks`, newTask);
-      console.log('Task added successfully:', response.data);
+      newTask.id = Date.now();
+      dispatch(addTask(newTask));
+
     } catch (error) {
       console.error('Error adding task:', error);
     }

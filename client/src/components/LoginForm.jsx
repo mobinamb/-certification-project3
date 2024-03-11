@@ -8,6 +8,7 @@ import { filterTasks } from './FilterBar'; // Import filterTasks helper function
 import config from '../../config';
 import '../style.css';
 
+
 const LoginForm = () => {
   const [registerSuccessMessage, setRegisterSuccessMessage] = useState('');
   const [personId, setPersonId] = useState('');
@@ -73,6 +74,7 @@ const LoginForm = () => {
   const handleFetchTasks = async () => {
     try {
       const response = await axios.get(`${config.API_BASE_URL}/api/categories/${personId}/${categoryId}`);
+      console.log(response.data);
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -81,12 +83,25 @@ const LoginForm = () => {
 
   const handleTaskAdd = async (newTask) => {
     try {
-      // Add the new task to the tasks array
-      setTasks([...tasks, newTask]);
+      // Make a POST request to create a new task under the specified category
+      const response = await axios.post(`${config.API_BASE_URL}/api/tasks/${categoryId}`, newTask);
+      
+      // Assuming the response contains the newly created task
+      const createdTask = response.data;
+  
+      // Update the tasks state with the newly created task
+      setTasks(prevTasks => {
+        if (!prevTasks) {
+          return [createdTask]; // Initialize tasks with the created task if prevTasks is null or undefined
+        }
+        return [...prevTasks, createdTask];
+      });
     } catch (error) {
       console.error('Error adding task:', error);
     }
   };
+  
+  
 
   const handleTaskEdit = async (updatedTask) => {
     try {
@@ -109,6 +124,12 @@ const LoginForm = () => {
   };
 
   useEffect(() => {
+    if (personId && categoryId) {
+      handleFetchTasks();
+    }
+  }, [personId, categoryId]);
+
+  useEffect(() => {
     // Filter the tasks based on the selected filters
     const newFilteredTasks = filterTasks(tasks, selectedFilters);
     setFilteredTasks(newFilteredTasks);
@@ -117,7 +138,6 @@ const LoginForm = () => {
   return (
     <div className="login-container">
       <CreateCategoryForm personId={personId} onCreateCategory={handleCategorySelect} />
-      <button onClick={handleFetchTasks}>Fetch Tasks</button>
       <div className="form-box">
         <h2>Login</h2>
         <form onSubmit={handleLoginSubmit} className="login-form">
@@ -176,11 +196,13 @@ const LoginForm = () => {
           {registerSuccessMessage && <p>{registerSuccessMessage}</p>}
         </form>
       </div>
-      {/* Render FilterBar, AddTaskForm, and TaskList */}
-      <FilterBar onFilterChange={handleFilterChange} />
-      <AddTaskForm onTaskAdd={handleTaskAdd} />
-      <TaskList tasks={filteredTasks} onTaskEdit={handleTaskEdit} />
-    </div>
+      {personId && categoryId && (
+  <>
+    <FilterBar onFilterChange={handleFilterChange} />
+    <AddTaskForm onTaskAdd={handleTaskAdd} />
+    <TaskList tasks={filteredTasks} onTaskEdit={handleTaskEdit} />
+  </>
+)}    </div>
   );
 };
 
