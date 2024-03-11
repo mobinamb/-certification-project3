@@ -1,14 +1,18 @@
 .login-container {
   margin: 0 auto;
   width: 100%;
-  max-width: 800px; /* Adjust the max-width to accommodate both forms */
+  max-width: 800px;
   margin-top: 10%;
-  display: flex; /* Use flexbox to align items horizontally */
-  justify-content: space-between; /* Add space between the forms */
+  display: flex;
+  justify-content: space-between;
 }
 
-.login-form, .register-form {
-  width: 100%; /* Adjust the width of each form to fit within the container */
+.form-box {
+  width: 45%;
+}
+
+.login-form,
+.register-form {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -27,7 +31,7 @@ label {
 
 input[type="text"],
 input[type="password"] {
-  width: calc(100% - 22px); /* Adjust width for input and consider padding */
+  width: calc(100% - 22px);
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;

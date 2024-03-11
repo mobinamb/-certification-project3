@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../style.css';
-import CreateCategoryForm from './CreateCategoryForm'; // Import CreateCategoryForm
-import TaskList from './TaskList'; // Import TaskList component
+import CreateCategoryForm from './CreateCategoryForm';
+import TaskList from './TaskList';
+import AddTaskForm from './AddTaskForm';
+import FilterBar from './FilterBar';
+import { filterTasks } from './FilterBar'; // Import filterTasks helper function
 import config from '../../config';
+import '../style.css';
 
 const LoginForm = () => {
+  const [registerSuccessMessage, setRegisterSuccessMessage] = useState('');
   const [personId, setPersonId] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [tasks, setTasks] = useState(null); // Initialize tasks to null initially
-
   const [loginFormData, setLoginFormData] = useState({
     loginUsername: '',
     loginPassword: ''
@@ -19,18 +21,20 @@ const LoginForm = () => {
     registerUsername: '',
     registerPassword: ''
   });
-
+  const [tasks, setTasks] = useState([]);
   const [loginSuccessMessage, setLoginSuccessMessage] = useState('');
-  const [registerSuccessMessage, setRegisterSuccessMessage] = useState('');
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({
+    // Define your initial filters here
+  });
+
+  const handleCategorySelect = (categoryName) => {
+    setCategoryId(categoryName);
+  };
 
   const handleLoginInputChange = (event) => {
     const { name, value } = event.target;
     setLoginFormData({ ...loginFormData, [name]: value });
-  };
-
-  const handleRegisterInputChange = (event) => {
-    const { name, value } = event.target;
-    setRegisterFormData({ ...registerFormData, [name]: value });
   };
 
   const handleLoginSubmit = async (event) => {
@@ -48,6 +52,11 @@ const LoginForm = () => {
     }
   };
 
+  const handleRegisterInputChange = (event) => {
+    const { name, value } = event.target;
+    setRegisterFormData({ ...registerFormData, [name]: value });
+  };
+
   const handleRegisterSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -63,19 +72,47 @@ const LoginForm = () => {
 
   const handleFetchTasks = async () => {
     try {
-      console.log(personId);
-      console.log(categoryId);
       const response = await axios.get(`${config.API_BASE_URL}/api/categories/${personId}/${categoryId}`);
-      console.log('Tasks for category:', response.data);
-      setTasks(response.data); // Update tasks state with fetched data
+      setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
     }
   };
 
-  const handleCategorySelect = (categoryId) => {
-    setCategoryId(categoryId);
+  const handleTaskAdd = async (newTask) => {
+    try {
+      // Add the new task to the tasks array
+      setTasks([...tasks, newTask]);
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
   };
+
+  const handleTaskEdit = async (updatedTask) => {
+    try {
+      // Find the index of the updated task in the tasks array
+      const index = tasks.findIndex(task => task.id === updatedTask.id);
+      // Create a copy of the tasks array
+      const updatedTasks = [...tasks];
+      // Replace the old task with the updated task
+      updatedTasks[index] = updatedTask;
+      // Update the tasks state
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  };
+
+  const handleFilterChange = (newFilters) => {
+    // Update the selectedFilters state with the new filters
+    setSelectedFilters(newFilters);
+  };
+
+  useEffect(() => {
+    // Filter the tasks based on the selected filters
+    const newFilteredTasks = filterTasks(tasks, selectedFilters);
+    setFilteredTasks(newFilteredTasks);
+  }, [tasks, selectedFilters]);
 
   return (
     <div className="login-container">
@@ -108,9 +145,8 @@ const LoginForm = () => {
           </div>
           <button type="submit">Login</button>
           {loginSuccessMessage && <p>{loginSuccessMessage}</p>}
-        </form>
+          </form>
       </div>
-
       <div className="form-box">
         <h2>Register</h2>
         <form onSubmit={handleRegisterSubmit} className="register-form">
@@ -140,13 +176,12 @@ const LoginForm = () => {
           {registerSuccessMessage && <p>{registerSuccessMessage}</p>}
         </form>
       </div>
-
-      {/* Render TaskList only if tasks is not null and is an array */}
-      {tasks && Array.isArray(tasks) && (
-        <TaskList tasks={tasks} />
-      )}
+      {/* Render FilterBar, AddTaskForm, and TaskList */}
+      <FilterBar onFilterChange={handleFilterChange} />
+      <AddTaskForm onTaskAdd={handleTaskAdd} />
+      <TaskList tasks={filteredTasks} onTaskEdit={handleTaskEdit} />
     </div>
   );
 };
 
-export default LoginForm;
+export default LoginForm

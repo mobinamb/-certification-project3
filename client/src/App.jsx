@@ -44,14 +44,15 @@ const App = () => {
                 <Link to="/">Home</Link>
               </li>
               <li>
+                <Link to="/loginForm">Login</Link> {/* Add a link to the login page */}
+              </li>
+              <li>
                 <Link to="/mainApp">MainApp</Link>
               </li>
               <li>
                 <Link to="/Contact">Contact</Link>
               </li>
-              <li>
-                <Link to="/loginForm">Login</Link> {/* Add a link to the login page */}
-              </li>
+              
             </ul>
           </nav>
         </header>
