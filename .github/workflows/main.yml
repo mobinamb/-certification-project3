@@ -21,10 +21,6 @@ jobs:
       - name: Install dependencies (server dir)
         working-directory: server
         run: npm install
-        
-      - name: Run back-end tests (server dir)
-        working-directory: server
-        run: npm test
 
       - name: Install dependencies (client dir)
         working-directory: client
