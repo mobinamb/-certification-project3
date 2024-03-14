@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 
+export const filterTasks = (tasks, filters) => {
+  // Your filtering logic here
+};
+
 const FilterBar = ({ onFilterChange }) => {
   const [selectedPriority, setSelectedPriority] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');

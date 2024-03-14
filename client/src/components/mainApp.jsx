@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import AddTaskForm from './AddTaskForm'; // Import  AddTaskForm component
+import AddTaskForm from './AddTaskForm'; // Import AddTaskForm component
 import TaskList from './TaskList'; // Import TaskList component
 import FilterBar from './FilterBar';
-// Import necessary functions for file operations (replace with your implementation)
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, editTask, setFilter, setLoading, setTasks} from './actions';
+import config from '../../config';
+import axios from 'axios';
+import CreateCategoryForm from './CreateCategoryForm'; // Import CreateCategoryForm component
 
 function filterTasks(tasks, selectedFilters) {
   return tasks.filter((task) => {
@@ -22,31 +24,49 @@ function isToday(dueDate) {
   const today = new Date();
   const taskDate = new Date(dueDate);
 
-  // Convert taskDate to the user's local timezone
   const userTimeZoneOffset = today.getTimezoneOffset() / 60;
   taskDate.setHours(taskDate.getHours() + userTimeZoneOffset);
 
-  // Compare dates in the user's local timezone
   return (
     today.toLocaleDateString() === taskDate.toLocaleDateString()
   );
 }
 
-
-const mainApp = () => {
-  //const [tasks, setTasks] = useState([]);
+const MainApp = () => {
+  const [selectedCategory, setSelectedCategory] = useState('');
   const tasks = useSelector((state) => state.tasks.tasks);
-  const isLoading = useSelector((state) => state.tasks.isLoading); // Access loading state
+  const isLoading = useSelector((state) => state.tasks.isLoading); 
   const dispatch = useDispatch();
   const selectedFilters = useSelector(state => state.tasks.selectedFilters);
-  //const [selectedFilters, setSelectedFilters] = useState({}); // Track selected filters
-  //const [isLoading, setIsLoading] = useState(true); // Track loading state
-  const [filteredTasks, setFilteredTasks] = useState([]); // Add the missing state variable
+  const [filteredTasks, setFilteredTasks] = useState([]); 
   const [file, setFile] = useState(null);
+  const [personId, setPersonId] = useState('');
   
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        dispatch(setLoading(true));
+        const response = await axios.get(`${config.API_BASE_URL}/api/tasks/${selectedCategory}`);
+        dispatch(setTasks(response.data));
+        dispatch(setLoading(false));
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+        dispatch(setLoading(false));
+      }
+    };
+
+    if (selectedCategory) {
+      fetchTasks();
+    }
+  }, [selectedCategory, dispatch]);
+
+  const handleCategorySelect = (categoryName) => {
+    setSelectedCategory(categoryName);
+  };
+
   const readTasksFromFile = async (file) => {
     try {
-        const tasksJSON = await file.text(); // Read file content directly
+        const tasksJSON = await file.text();
         return JSON.parse(tasksJSON);
     } catch (error) {
         console.error('Error reading tasks from file:', error);
@@ -54,22 +74,17 @@ const mainApp = () => {
     }
   };
 
-  // Function to save tasks to a JSON file
   const saveTasksToFile = async (filteredTasks) => {
     try {
       const tasksJSON = JSON.stringify(filteredTasks, null, 2);
       const blob = new Blob([tasksJSON], { type: 'application/json' });
   
-      // Request user permission to save a file
       const fileHandle = await window.showSaveFilePicker();
   
-      // Create a writable stream to the file
       const writableStream = await fileHandle.createWritable();
   
-      // Write data to the file
       await writableStream.write(blob);
   
-      // Close the file
       await writableStream.close();
   
       console.log('Tasks saved successfully!');
@@ -78,29 +93,23 @@ const mainApp = () => {
     }
   };
   
+  const handleSaveButtonClick = async (filteredTasks) => {
+    try {
+      await saveTasksToFile(filteredTasks);
+    } catch (error) {
+      console.error('Error saving tasks:', error);
+    }
+  };
 
-// Button click handler to trigger the save operation
-const handleSaveButtonClick = async (filteredTasks) => {
-  try {
-    // Save filtered tasks to JSON file
-    await saveTasksToFile(filteredTasks);
-  } catch (error) {
-    console.error('Error saving tasks:', error);
-  }
-};
-
-
-  // Function to handle file selection
   const handleFileChange = async (event) => {
-    const file = event.target.files[0]; // Get the selected file
+    const file = event.target.files[0]; 
     if (!file || file.length === 0) {
-      console.error('No file selected'); // Handle the case of no file selected
-      return; // No file selected
+      console.error('No file selected');
+      return; 
     }
 
     try {
-      const loadedTasks = await readTasksFromFile(file); // Pass the file object directly
-      //setTasks(loadedTasks);
+      const loadedTasks = await readTasksFromFile(file); 
       dispatch(setTasks(loadedTasks));
       setFile(file);
   } catch (error) {
@@ -113,26 +122,21 @@ const handleSaveButtonClick = async (filteredTasks) => {
       try {
         if(file){
         const loadedTasks = await readTasksFromFile(file);
-        //setTasks(loadedTasks);
         dispatch(setTasks(loadedTasks));
         }
       } catch (error) {
         console.error('Error fetching tasks:', error);
-        // Handle error gracefully (e.g., display an error message)
       } finally {
-        //setIsLoading(false);
-        dispatch(setLoading(false)); // Update isLoading state using redux action
+        dispatch(setLoading(false));
       }
     };
 
     fetchTasks();
   }, [file,dispatch]);
 
-
   const handleTaskAdd = async (newTask) => {
     try {
       newTask.id = Date.now();
-      //setTasks([...tasks, newTask]); // Update state immediately for UI feedback
       dispatch(addTask(newTask));
 
     } catch (error) {
@@ -143,21 +147,17 @@ const handleSaveButtonClick = async (filteredTasks) => {
   const handleTaskEdit = async (updatedTask) => {
     try {
       const updatedTasks = tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task));
-      //setTasks(updatedTasks); // Update state immediately for UI feedback
       dispatch(editTask(updatedTasks));
     } catch (error) {
       console.error('Error updating task:', error);
-      // Handle error gracefully (e.g., revert local state update)
     }
   };
 
   const handleFilterChange = (newFilters) => {
-    //setSelectedFilters({ ...selectedFilters, ...newFilters }); // Update filters
     dispatch(setFilter(newFilters));
   };
 
   useEffect(() => {
-    // Recalculate filtered tasks based on updated tasks and filters
     const newFilteredTasks = filterTasks(tasks, selectedFilters);
     setFilteredTasks(newFilteredTasks);
   }, [tasks, selectedFilters]);
@@ -165,35 +165,24 @@ const handleSaveButtonClick = async (filteredTasks) => {
 
   return (
     <div className="app-container">
-      
       <button className="back-to-home-button">
-      <Link to="/">Back to Home</Link>
-    </button>
-    
+        <Link to="/">Back to Home</Link>
+      </button>
       <h1>My Quiz Task List</h1>
       {isLoading ? (
         <p>Loading tasks...</p>
       ) : (
-
         <>
-          {/* File input for selecting JSON file */}
           <input type="file" onChange={handleFileChange} accept=".json" />
-          
           <button onClick={() => handleSaveButtonClick(filterTasks(tasks, selectedFilters))}>Save Filtered Tasks</button>
-
           <AddTaskForm onTaskAdd={handleTaskAdd} />
           <FilterBar onFilterChange={handleFilterChange} />
           <TaskList
             tasks={filteredTasks}
-            onTaskEdit={handleTaskEdit}
-            //setTasks={setTasks}
-          />
-        </>
+            onTaskEdit={handleTaskEdit} />        </>
       )}
     </div>
   );
-
-  
 };
 
-export default mainApp;
+export default MainApp;

@@ -77,14 +77,18 @@ const AddTaskForm = ({ onTaskAdd }) => {
         placeholder="Task Title"
         {...(errors.title && { error: true, errorMessage: errors.title })}
       />
-      <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+
+
+      <label for="priority">Priority:</label>
+      <select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}>
         <option value="">Select Priority</option>
         <option value="low">Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
 
-      <select value={completion} onChange={(e) => setCompletion(e.target.value)}>
+      <label for="Completion">Completion:</label>
+      <select id="Completion" value={completion} onChange={(e) => setCompletion(e.target.value)}>
         <option value="">Select Completion</option>
         <option value="todo">todo</option>
         <option value="in progress">in progress</option>
