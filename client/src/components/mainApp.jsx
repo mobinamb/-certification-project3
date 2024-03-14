@@ -175,14 +175,11 @@ const MainApp = () => {
         <>
           <input type="file" onChange={handleFileChange} accept=".json" />
           <button onClick={() => handleSaveButtonClick(filterTasks(tasks, selectedFilters))}>Save Filtered Tasks</button>
-          <CreateCategoryForm onCreateCategory={handleCategorySelect} />
           <AddTaskForm onTaskAdd={handleTaskAdd} />
           <FilterBar onFilterChange={handleFilterChange} />
           <TaskList
             tasks={filteredTasks}
-            onTaskEdit={handleTaskEdit}
-          />
-        </>
+            onTaskEdit={handleTaskEdit} />        </>
       )}
     </div>
   );

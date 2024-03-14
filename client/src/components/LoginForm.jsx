@@ -1,12 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CreateCategoryForm from './CreateCategoryForm';
-import TaskList from './TaskList';
 import AddTaskForm from './AddTaskForm';
 import FilterBar from './FilterBar';
-import { filterTasks } from './FilterBar'; // Import filterTasks helper function
 import config from '../../config';
 import '../style.css';
+import TaskDisplay from './TaskDisplay'; // Import the TaskDisplay component
+
+
+const filterTasks = (tasks, selectedFilters) => {
+  const filteredTasks = [];
+  
+  for (let i = 0; i < tasks.length; i++) {
+    const task = tasks[i];
+    const priorityMatches = !selectedFilters.priority || task.priority === selectedFilters.priority;
+    const statusMatches = !selectedFilters.completion || task.completion === selectedFilters.completion;
+    const isTodaysTask = !selectedFilters.todayOnly || isToday(task.dueDate);
+
+    if (priorityMatches && statusMatches && isTodaysTask) {
+      filteredTasks.push(task);
+    }
+  }
+  
+  return filteredTasks;
+};
+
+const isToday = (dueDate) => {
+  const today = new Date();
+  const taskDate = new Date(dueDate);
+
+  const userTimeZoneOffset = today.getTimezoneOffset() / 60;
+  taskDate.setHours(taskDate.getHours() + userTimeZoneOffset);
+
+  return today.toLocaleDateString() === taskDate.toLocaleDateString();
+};
 
 
 const LoginForm = () => {
@@ -137,6 +164,16 @@ const LoginForm = () => {
     setFilteredTasks(newFilteredTasks);
   }, [tasks, selectedFilters]);
 
+
+  useEffect(() => {
+    // Ensure that tasks is an array before filtering
+    if (Array.isArray(tasks)) {
+      const newFilteredTasks = filterTasks(tasks, selectedFilters);
+      setFilteredTasks(newFilteredTasks);
+    }
+  }, [tasks, selectedFilters]);
+
+
   return (
     <div className="login-container">
       <CreateCategoryForm personId={personId} onCreateCategory={handleCategorySelect} />
@@ -202,9 +239,14 @@ const LoginForm = () => {
   <>
     <FilterBar onFilterChange={handleFilterChange} />
     <AddTaskForm onTaskAdd={handleTaskAdd} />
-    <TaskList tasks={filteredTasks} onTaskEdit={handleTaskEdit} />
+    {Array.isArray(tasks) && tasks.length > 0 ? (
+            <TaskDisplay tasks={tasks} filters={selectedFilters} /> 
+          ) : (
+            <p>No tasks available.</p>
+          )}
   </>
 )}    </div>
+
   );
 };
 
