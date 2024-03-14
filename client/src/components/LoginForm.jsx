@@ -82,24 +82,26 @@ const LoginForm = () => {
   };
 
   const handleTaskAdd = async (newTask) => {
-    try {
-      // Make a POST request to create a new task under the specified category
-      const response = await axios.post(`${config.API_BASE_URL}/api/tasks/${categoryId}`, newTask);
-      
-      // Assuming the response contains the newly created task
-      const createdTask = response.data;
-  
-      // Update the tasks state with the newly created task
-      setTasks(prevTasks => {
-        if (!prevTasks) {
-          return [createdTask]; // Initialize tasks with the created task if prevTasks is null or undefined
-        }
-        return [...prevTasks, createdTask];
-      });
-    } catch (error) {
-      console.error('Error adding task:', error);
-    }
-  };
+  try {
+    // Make a POST request to create a new task under the specified category
+    const response = await axios.post(`${config.API_BASE_URL}/api/tasks/${categoryId}`, newTask);
+    
+    // Assuming the response contains the newly created task
+    const createdTask = response.data;
+
+    // Update the tasks state with the newly created task
+    setTasks(prevTasks => {
+      if (!prevTasks || !Array.isArray(prevTasks)) {
+        return [createdTask]; // Initialize tasks with the created task if prevTasks is null or undefined
+      }
+      return [...prevTasks, createdTask];
+    });
+  } catch (error) {
+    console.error('Error adding task:', error);
+    // Optionally, you can handle the error here by displaying a notification or performing other actions
+  }
+};
+
   
   
 
