@@ -34,3 +34,14 @@ jobs:
         working-directory: client
         run: npm run test
 
+      - name: Run server deploy hook
+        run: |
+          curl -X POST -d {} $SERVER_DEPLOYMENT_HOOK
+        env:
+          SERVER_DEPLOYMENT_HOOK: ${{ secrets.SERVER_DEPLOYMENT_HOOK }}
+
+      - name: Run client deploy hook
+        run: |
+          curl -X POST -d {} $CLIENT_DEPLOYMENT_HOOK
+        env:
+          CLIENT_DEPLOYMENT_HOOK: ${{ secrets.CLIENT_DEPLOYMENT_HOOK }}
