@@ -1,4 +1,8 @@
 module.exports = {
-  // Other Jest configuration options...
+  transformIgnorePatterns: [
+    '/node_modules/(?!(bson)/)'
+  ],
   setupFilesAfterEnv: ['@babel/register'],
 };
+
+
