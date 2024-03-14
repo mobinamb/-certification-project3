@@ -21,8 +21,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/people', peopleRoutes);
 app.use('/api/login', loginRoutes);
-// Start the server
 
-app.listen(PORT, () => {
+module.exports = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
