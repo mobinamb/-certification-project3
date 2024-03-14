@@ -1,0 +1,36 @@
+name: Production Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy_production:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+
+      - name: Install dependencies (server dir)
+        working-directory: server
+        run: npm install
+
+      - name: Run back-end tests (server dir)
+        working-directory: server
+        run: npm run test
+
+      - name: Install dependencies (client dir)
+        working-directory: client
+        run: npm install
+
+      - name: Run front-end tests (client dir)
+        working-directory: client
+        run: npm run test
+
