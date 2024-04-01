@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CreateCategoryForm from './CreateCategoryForm';
-import AddTaskForm from './AddTaskForm';
-import FilterBar from './FilterBar';
 import config from '../../config';
 import '../style.css';
-import TaskDisplay from './TaskDisplay'; // Import the TaskDisplay component
+
 
 
 const filterTasks = (tasks, selectedFilters) => {
@@ -56,9 +54,10 @@ const LoginForm = () => {
     // Define your initial filters here
   });
 
-  const handleCategorySelect = (categoryName) => {
-    setCategoryId(categoryName);
+  const handleCategorySelect = (categoryId) => {
+    setCategoryId(categoryId);
   };
+  
 
   const handleLoginInputChange = (event) => {
     const { name, value } = event.target;
@@ -176,7 +175,7 @@ const LoginForm = () => {
 
   return (
     <div className="login-container">
-      <CreateCategoryForm personId={personId} onCreateCategory={handleCategorySelect} />
+      <CreateCategoryForm personId={personId} onCreateCategory={handleCategorySelect} selectedFilters={selectedFilters} />
       <div className="form-box">
         <h2>Login</h2>
         <form onSubmit={handleLoginSubmit} className="login-form">
@@ -235,17 +234,7 @@ const LoginForm = () => {
           {registerSuccessMessage && <p>{registerSuccessMessage}</p>}
         </form>
       </div>
-      {personId && categoryId && (
-  <>
-    <FilterBar onFilterChange={handleFilterChange} />
-    <AddTaskForm onTaskAdd={handleTaskAdd} />
-    {Array.isArray(tasks) && tasks.length > 0 ? (
-            <TaskDisplay tasks={tasks} filters={selectedFilters} /> 
-          ) : (
-            <p>No tasks available.</p>
-          )}
-  </>
-)}    </div>
+      </div>
 
   );
 };

@@ -4,7 +4,7 @@ const Task = require('../models/Task');
 const Category = require('../models/Category');
 
 // GET all tasks
-router.get('/', async (req, res) => {
+router.get('/:categoryId/', async (req, res) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET a specific task
-router.get('/:id', async (req, res) => {
+router.get('/:categoryId/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (task == null) {

@@ -65,7 +65,6 @@ const AddTaskForm = ({ onTaskAdd }) => {
     return isValid;
   };
 
-  // ... (rest of the component JSX, including input fields)
 
   return (
     <form onSubmit={handleSubmit}>

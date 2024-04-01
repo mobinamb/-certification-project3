@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addTask, editTask, setFilter, setLoading, setTasks} from './actions';
 import config from '../../config';
 import axios from 'axios';
-import CreateCategoryForm from './CreateCategoryForm'; // Import CreateCategoryForm component
 
 function filterTasks(tasks, selectedFilters) {
   return tasks.filter((task) => {

@@ -1,17 +1,6 @@
-import React from 'react';
+\import React from 'react';
 
-const filterTasks = (tasks, selectedFilters) => {
-    return tasks.filter((task) => {
-      const priorityMatches = !selectedFilters.priority || task.priority === selectedFilters.priority;
-      const statusMatches = !selectedFilters.completion || task.completion === selectedFilters.completion;
-      const isTodaysTask = !selectedFilters.todayOnly || isToday(task.dueDate);
-  
-      return priorityMatches && statusMatches && isTodaysTask;
-    });
-  };
-
-
-  const isToday = (dueDate) => {
+const isToday = (dueDate) => {
     const today = new Date();
     const taskDate = new Date(dueDate);
   
@@ -19,14 +8,13 @@ const filterTasks = (tasks, selectedFilters) => {
     taskDate.setHours(taskDate.getHours() + userTimeZoneOffset);
   
     return today.toLocaleDateString() === taskDate.toLocaleDateString();
-  };
+};
   
-const TaskDisplay = ({ tasks, filters }) => {
-  const filteredTasks = filterTasks(tasks, filters);
-  return (
+const TaskDisplay = ({ tasks }) => {
+    return (
     <div>
-      {/* Render filtered tasks */}
-      {filteredTasks.map((task) => (
+      {/* Render tasks */}
+      {tasks.map((task) => (
         <div key={task.id}>
           {/* Render task details */}
           <p>Title: {task.title}</p>

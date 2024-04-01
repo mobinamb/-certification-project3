@@ -1,14 +1,17 @@
+import { combineReducers } from 'redux';
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+// Initial state for tasks slice
+const initialTaskState = {
   tasks: [],
   isLoading: true,
   selectedFilters: {},
 };
 
+// Task slice reducer
 const taskSlice = createSlice({
   name: 'tasks',
-  initialState,
+  initialState: initialTaskState,
   reducers: {
     addTask: (state, action) => {
       state.tasks.push(action.payload);
@@ -34,11 +37,9 @@ const taskSlice = createSlice({
       state.tasks = action.payload;
     },
     updateTask: (state, action) => {
-      // Find the index of the task to update
       const updatedTaskIndex = state.tasks.findIndex(
         (task) => task.id === action.payload.id
       );
-      // Update the task if found
       if (updatedTaskIndex !== -1) {
         state.tasks[updatedTaskIndex] = action.payload;
       }
@@ -46,5 +47,39 @@ const taskSlice = createSlice({
   },
 });
 
-export const { addTask, editTask, deleteTask, setFilter, setLoading, setTasks, updateTask } = taskSlice.actions;
-export default taskSlice.reducer;
+// Initial state for taskLists slice
+const initialTaskListState = {
+  taskLists: [],
+};
+
+// TaskLists slice reducer
+const taskListSlice = createSlice({
+  name: 'taskLists',
+  initialState: initialTaskListState,
+  reducers: {
+    addTaskList: (state, action) => {
+      state.taskLists.push(action.payload);
+    },
+    deleteTaskList: (state, action) => {
+      state.taskLists = state.taskLists.filter(
+        (taskList) => taskList.id !== action.payload.id
+      );
+    },
+    updateTaskList: (state, action) => {
+      const updatedTaskListIndex = state.taskLists.findIndex(
+        (taskList) => taskList.id === action.payload.id
+      );
+      if (updatedTaskListIndex !== -1) {
+        state.taskLists[updatedTaskListIndex] = action.payload;
+      }
+    },
+  },
+});
+
+// Combine reducers
+const rootReducer = combineReducers({
+  tasks: taskSlice.reducer,
+  taskLists: taskListSlice.reducer,
+});
+
+export default rootReducer;
